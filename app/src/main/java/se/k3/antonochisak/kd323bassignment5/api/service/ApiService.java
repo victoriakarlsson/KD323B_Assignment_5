@@ -20,16 +20,11 @@ import static se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers.TRAKT_C
 
 public interface ApiService {
 
-    String limit = "?page=1&limit=40";
-
     @Headers({TRAKT_CONTENT_TYPE, TRAKT_API_KEY, TRAKT_API_VERSION})
     @GET("/movies/popular")
     void getPopular(@Query("extended") String extended, Callback<List<ApiResponse>> callback);
 
-    // Add your own method below, similar to the one above but with different url
-
     @Headers({TRAKT_CONTENT_TYPE, TRAKT_API_KEY, TRAKT_API_VERSION})
-    @GET("/movies/trending") // unfinished url
+    @GET("PUT_URL_HERE") // unfinished url, go to http://docs.trakt.apiary.io/ and find the trending-url
     void getTrending(@Query("extended") String extended, Callback<List<RootApiResponse>> callback);
-
 }

@@ -99,6 +99,7 @@ public class PopularMoviesFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         // listener = Callback<List<ApiResponse>>
+        // go to http://docs.trakt.apiary.io/#introduction/extended-info, what should you include?
         mRestClient.getApiService().getPopular("images", this);
         initVoteTimer();
     }

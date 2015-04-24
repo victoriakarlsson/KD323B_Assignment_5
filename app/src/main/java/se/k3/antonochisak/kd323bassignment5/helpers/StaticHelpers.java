@@ -14,9 +14,6 @@ import android.view.WindowManager;
  */
 public class StaticHelpers {
 
-
-    // https://api-v2launch.trakt.tv/movies/trending, url to get trending movies from trakt
-
     public static final String FIREBASE_CHILD = "top_movies"; // Change this to create a new "room" to view on the desktop
 
     public static final String API_URL = "https://api-v2launch.trakt.tv";
