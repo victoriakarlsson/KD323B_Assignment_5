@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -66,6 +67,9 @@ public class PopularMoviesFragment extends Fragment
     @InjectView(R.id.gridView)
     GridView mMoviesGrid;
 
+    @InjectView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +105,7 @@ public class PopularMoviesFragment extends Fragment
         // listener = Callback<List<ApiResponse>>
         // go to http://docs.trakt.apiary.io/#introduction/extended-info, what should you include?
         mRestClient.getApiService().getPopular("images", this);
+        mProgressBar.setVisibility(View.VISIBLE);
         initVoteTimer();
     }
 
@@ -172,6 +177,7 @@ public class PopularMoviesFragment extends Fragment
 
     @Override
     public void success(List<ApiResponse> apiResponses, Response response) {
+        mProgressBar.setVisibility(View.GONE);
         for (ApiResponse r : apiResponses) {
             Movie movie = new Movie.Builder()
                     .title(r.title)
