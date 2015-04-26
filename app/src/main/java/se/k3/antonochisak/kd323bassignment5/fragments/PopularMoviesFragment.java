@@ -44,9 +44,6 @@ import static se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers.FIREBAS
 public class PopularMoviesFragment extends Fragment
         implements Callback<List<ApiResponse>>, GridView.OnItemClickListener {
 
-    // Tag for logging,
-    private static final String TAG = PopularMoviesFragment.class.getSimpleName();
-
     // List of movies
     ArrayList<Movie> mMovies;
 
@@ -150,13 +147,6 @@ public class PopularMoviesFragment extends Fragment
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 Toast.makeText(getActivity(), "Gillade " + mMovies.get(i).getTitle(), Toast.LENGTH_SHORT).show();
                 updateVotes();
-
-                if(firebaseError != null && firebaseError.getCode() == FirebaseError.NETWORK_ERROR) {
-                    Toast.makeText(getActivity(),
-                            getResources().getString(R.string.retrofit_network_error),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
             }
         });
     }
@@ -184,6 +174,8 @@ public class PopularMoviesFragment extends Fragment
     public void success(List<ApiResponse> apiResponses, Response response) {
         mProgressBar.setVisibility(View.GONE);
         for (ApiResponse r : apiResponses) {
+
+            // Build a new movie-object for every response and add to list
             Movie movie = new Movie.Builder()
                     .title(r.title)
                     .slugLine(r.ids.getSlug())
