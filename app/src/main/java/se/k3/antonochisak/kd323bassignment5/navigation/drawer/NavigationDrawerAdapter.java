@@ -23,7 +23,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
     public NavigationDrawerAdapter(LayoutInflater layoutInflater, ArrayList<String> list) {
         this.mList = list;
         this.mLayoutInflater = layoutInflater;
-
     }
 
     @SuppressLint("InflateParams")

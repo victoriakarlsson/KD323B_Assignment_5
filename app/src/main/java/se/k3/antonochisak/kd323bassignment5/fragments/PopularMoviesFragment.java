@@ -150,6 +150,13 @@ public class PopularMoviesFragment extends Fragment
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 Toast.makeText(getActivity(), "Gillade " + mMovies.get(i).getTitle(), Toast.LENGTH_SHORT).show();
                 updateVotes();
+
+                if(firebaseError != null && firebaseError.getCode() == FirebaseError.NETWORK_ERROR) {
+                    Toast.makeText(getActivity(),
+                            getResources().getString(R.string.retrofit_network_error),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
     }
@@ -168,9 +175,7 @@ public class PopularMoviesFragment extends Fragment
 
             @Override
             public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
-                if (firebaseError != null) {
-                    Log.d(TAG + " Error", firebaseError.getMessage());
-                }
+
             }
         });
     }
@@ -194,6 +199,11 @@ public class PopularMoviesFragment extends Fragment
 
     @Override
     public void failure(RetrofitError error) {
-        error.printStackTrace();
+        if(error.getKind() == RetrofitError.Kind.NETWORK) {
+            Toast.makeText(getActivity(),
+                    getResources().getString(R.string.retrofit_network_error),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 }

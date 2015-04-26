@@ -18,4 +18,6 @@
     <string-array name="drawer_items">
         <item>@string/popular_movies_fragment</item>
     </string-array>
+
+    <string name="retrofit_network_error">Network error</string>
 </resources>
