@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import se.k3.antonochisak.kd323bassignment5.R;
 import se.k3.antonochisak.kd323bassignment5.fragments.PopularMoviesFragment;
+import se.k3.antonochisak.kd323bassignment5.fragments.TrendingFragment;
 import se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers;
 
 /**
@@ -103,6 +104,9 @@ public class NavigationDrawer implements AdapterView.OnItemClickListener {
             case 0:
                 fragment = new PopularMoviesFragment();
                 break;
+            // If case 1 (nav. drawer option 2, create TrendingFragment. // Mattias
+            case 1:
+                fragment = new TrendingFragment();
             default:
                 break;
         }
