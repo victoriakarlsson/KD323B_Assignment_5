@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import se.k3.antonochisak.kd323bassignment5.models.movie.Ids;
+import se.k3.antonochisak.kd323bassignment5.models.movie.Image;
+
 /**
  * Created by isak on 2015-04-24.
  */
@@ -13,4 +16,5 @@ public class RootApiResponse {
 
     @SerializedName("movie")
     public ApiResponse apiResponse;
-}
+
+    }

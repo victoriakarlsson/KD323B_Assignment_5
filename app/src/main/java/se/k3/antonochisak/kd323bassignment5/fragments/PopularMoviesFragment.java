@@ -183,7 +183,7 @@ public class PopularMoviesFragment extends Fragment
                     .fanArt(r.image.getFanArt().getFullFanArt())
                     .year(r.year)
                     .build();
-
+Log.i("success, popular"," Added: "+ r.title);
             mMovies.add(movie);
             mAdapter.notifyDataSetChanged();
         }
