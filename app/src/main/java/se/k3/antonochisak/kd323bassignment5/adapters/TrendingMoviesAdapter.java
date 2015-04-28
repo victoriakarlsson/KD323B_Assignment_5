@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers;
 import se.k3.antonochisak.kd323bassignment5.models.movie.Movie;
 
 /**
@@ -24,8 +25,8 @@ public class TrendingMoviesAdapter extends BaseAdapter {
     ArrayList<Movie> mMovies;
     LayoutInflater mLayoutInflater;
 
-
-    private int mItemWidth, mItemHeight, mMargin;
+    // not needed
+    //private int mItemWidth, mItemHeight, mMargin;
 
     public TrendingMoviesAdapter(ArrayList<Movie> mMovies, LayoutInflater mLayoutInflater) {
         this.mMovies = mMovies;
@@ -37,10 +38,14 @@ public class TrendingMoviesAdapter extends BaseAdapter {
         @InjectView(R.id.iw_poster)
         ImageView poster;
 
+        // isak changed here
+        int screenWidth;
+
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
 
-            //  int screenWidth = StaticHelpers.getScreenWidth(view.getContext());
+            // and here
+            this.screenWidth = StaticHelpers.getScreenWidth(view.getContext());
             // mItemWidth = (screenWidth / 2);
             // mItemHeight = (int) ((double) mItemWidth / 0.677);
             // mMargin = StaticHelpers.getPixelsFromDp(view.getContext(), 2);
@@ -57,12 +62,13 @@ public class TrendingMoviesAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
+
         // Loading images with piacsso for list items.
         Log.i("TendingMoviesAdapter", "list item added!");
             Picasso.with(view.getContext())
             .load(mMovies.get(i).getPoster())
-
-                    //.resize(mItemWidth, mItemHeight)
+                    // isak changed here
+                    .resize(holder.screenWidth, 0)
                     .into(holder.poster);
 
         // Setting movie title on list textfield
