@@ -1,19 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-        android:text="Movie!"
-    android:textSize="18dp"
-    android:paddingBottom="22dp"
-    android:textColor="#ff4b9bff" />
+    android:layout_width="match_parent"
+    android:background="#ff303030">
+
     <ImageView
+        android:layout_width="match_parent"
+    android:layout_height="match_parent"
         android:id="@+id/posterya"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/large_movie_poster" />
+        android:orientation="vertical"
+        android:gravity="right"
+        android:layout_alignParentRight="true">
 
-</LinearLayout>
+        <TextView
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:id="@+id/tw_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Movie title."
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            android:background="#48000000" />
+
+        <TextView
+            android:layout_below="@+id/tw_title"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tw_year"
+            android:text="Production year."
+            android:textColor="#ffffffff"
+            android:textSize="12sp"
+            android:background="#48000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#48000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:text="Tagline"
+            android:id="@+id/tw_tag"
+            android:textColor="#ffffffff"
+            android:textSize="16sp"
+            android:paddingLeft="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:layout_height="32dp"
+            android:text="Overview"
+            android:id="@+id/tw_overview"
+            android:textColor="#ffffffff"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</RelativeLayout>

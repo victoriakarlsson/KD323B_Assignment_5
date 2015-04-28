@@ -103,7 +103,7 @@ public class TrendingFragment extends MoviesFragment
 
         // listener = Callback<List<ApiResponse>>
         // go to http://docs.trakt.apiary.io/#introduction/extended-info, what should you include?
-        mRestClient.getApiService().getTrending("images", this);
+        mRestClient.getApiService().getTrending("full,images", this);
         mProgressBar.setVisibility(View.VISIBLE);
         initVoteTimer();
     }
@@ -140,9 +140,11 @@ public class TrendingFragment extends MoviesFragment
 
         mMovieMap.put("title", movie.getTitle());
         mMovieMap.put("year", movie.getYear());
+        mMovieMap.put("tagline", movie.getTitle());
         mMovieMap.put("slugline", movie.getSlugline());
         mMovieMap.put("poster", movie.getPoster());
         mMovieMap.put("fanart", movie.getFanArt());
+
 
         mRef.child(mCurrentClickedMovie).updateChildren(mMovieMap, new Firebase.CompletionListener() {
             @Override
@@ -184,8 +186,10 @@ public class TrendingFragment extends MoviesFragment
                             .poster(r.apiResponse.image.getPoster().getMediumPoster())
                            .fanArt(r.apiResponse.image.getFanArt().getFullFanArt())
                            .year(r.apiResponse.year)
+                    .overview(r.apiResponse.overview)
+                    .tagline(r.apiResponse.tagline)
                     .build();
-            Log.i("Success", "Added item!"+r.apiResponse.title);
+                Log.i("Success", "Added item!" + r.apiResponse.title + " " + r.apiResponse.tagline);
             mMovies.add(movie);
             mAdapter.notifyDataSetChanged();
         }

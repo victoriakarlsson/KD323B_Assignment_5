@@ -1,12 +1,17 @@
 package se.k3.antonochisak.kd323bassignment5.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import se.k3.antonochisak.kd323bassignment5.R;
 import java.util.ArrayList;
@@ -22,6 +27,8 @@ import se.k3.antonochisak.kd323bassignment5.models.movie.Movie;
 public class TrendingMoviesAdapter extends BaseAdapter {
     ArrayList<Movie> mMovies;
     LayoutInflater mLayoutInflater;
+
+
     private int mItemWidth, mItemHeight, mMargin;
 
     public TrendingMoviesAdapter(ArrayList<Movie> mMovies, LayoutInflater mLayoutInflater) {
@@ -29,7 +36,7 @@ public class TrendingMoviesAdapter extends BaseAdapter {
         this.mLayoutInflater = mLayoutInflater;
     }
 
-    // We always use a viewholder pattern on listviews!
+    // Viewholder for posters
     class ViewHolder {
         @InjectView(R.id.posterya)
         ImageView poster;
@@ -37,10 +44,10 @@ public class TrendingMoviesAdapter extends BaseAdapter {
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
 
-            int screenWidth = StaticHelpers.getScreenWidth(view.getContext());
-            mItemWidth = (screenWidth / 2);
-            mItemHeight = (int) ((double) mItemWidth / 0.677);
-            mMargin = StaticHelpers.getPixelsFromDp(view.getContext(), 2);
+            //  int screenWidth = StaticHelpers.getScreenWidth(view.getContext());
+            // mItemWidth = (screenWidth / 2);
+            // mItemHeight = (int) ((double) mItemWidth / 0.677);
+            // mMargin = StaticHelpers.getPixelsFromDp(view.getContext(), 2);
         }
     }
     @Override
@@ -54,13 +61,36 @@ public class TrendingMoviesAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
- // Load pictures with picasso
+        // Loading images with piacsso for list items.
+        Log.i("TendingMoviesAdapter", "list item added!");
             Picasso.with(view.getContext())
             .load(mMovies.get(i).getPoster())
-            .resize(mItemWidth, mItemHeight)
+
+                    //.resize(mItemWidth, mItemHeight)
     .into(holder.poster);
-    return view;
-}
+
+        // Setting movie title on list textfield
+        TextView mTitle = (TextView) view.findViewById(R.id.tw_title);
+        mTitle.setText(mMovies.get(i).getTitle());
+
+
+        //Converting movie year int to string and setting it on textfield.
+        String movieYear = String.valueOf(mMovies.get(i).getYear());
+        TextView mYear = (TextView) view.findViewById(R.id.tw_year);
+        mYear.setText("Year: " + movieYear);
+
+        // Setting tagline.
+        TextView mTag = (TextView) view.findViewById(R.id.tw_tag);
+        mTag.setText(mMovies.get(i).getTagline());
+
+        // Setting tagline.
+        TextView mOverview = (TextView) view.findViewById(R.id.tw_overview);
+        mOverview.setText(mMovies.get(i).getOverview());
+
+        ImageView poster = (ImageView) view.findViewById(R.id.posterya);
+        poster.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        return view;
+    }
 
     @Override
     public int getCount() {
