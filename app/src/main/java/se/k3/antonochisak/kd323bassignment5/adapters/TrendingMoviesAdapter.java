@@ -6,19 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import se.k3.antonochisak.kd323bassignment5.R;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers;
 import se.k3.antonochisak.kd323bassignment5.models.movie.Movie;
 
 /**
@@ -38,7 +34,7 @@ public class TrendingMoviesAdapter extends BaseAdapter {
 
     // Viewholder for posters
     class ViewHolder {
-        @InjectView(R.id.posterya)
+        @InjectView(R.id.iw_poster)
         ImageView poster;
 
         public ViewHolder(View view) {
@@ -67,7 +63,7 @@ public class TrendingMoviesAdapter extends BaseAdapter {
             .load(mMovies.get(i).getPoster())
 
                     //.resize(mItemWidth, mItemHeight)
-    .into(holder.poster);
+                    .into(holder.poster);
 
         // Setting movie title on list textfield
         TextView mTitle = (TextView) view.findViewById(R.id.tw_title);
@@ -77,17 +73,18 @@ public class TrendingMoviesAdapter extends BaseAdapter {
         //Converting movie year int to string and setting it on textfield.
         String movieYear = String.valueOf(mMovies.get(i).getYear());
         TextView mYear = (TextView) view.findViewById(R.id.tw_year);
-        mYear.setText("Year: " + movieYear);
+        mYear.setText(movieYear);
 
-        // Setting tagline.
+        // Setting movie tagline.
         TextView mTag = (TextView) view.findViewById(R.id.tw_tag);
         mTag.setText(mMovies.get(i).getTagline());
 
-        // Setting tagline.
+        // Setting movie overview.
         TextView mOverview = (TextView) view.findViewById(R.id.tw_overview);
         mOverview.setText(mMovies.get(i).getOverview());
 
-        ImageView poster = (ImageView) view.findViewById(R.id.posterya);
+        // Setting movie poster
+        ImageView poster = (ImageView) view.findViewById(R.id.iw_poster);
         poster.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return view;
     }

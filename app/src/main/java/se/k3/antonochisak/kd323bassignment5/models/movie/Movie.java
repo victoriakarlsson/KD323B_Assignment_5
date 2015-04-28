@@ -15,6 +15,7 @@ public class Movie {
     private String overview;
     private String tagline;
     private int year;
+    private String imdb;
 
     @ParcelConstructor
     private Movie(Builder builder) {
@@ -23,6 +24,7 @@ public class Movie {
         this.poster = builder.poster;
         this.fanArt = builder.fanArt;
         this.year = builder.year;
+        this.imdb = builder.imdb;
         this.overview = builder.overview;
         this.tagline = builder.tagline;
     }
@@ -31,6 +33,9 @@ public class Movie {
         return title;
     }
 
+    public String getImdb() {
+        return imdb;
+    }
     public String getSlugline() {
         return slugline;
     }
@@ -55,8 +60,9 @@ public class Movie {
         return tagline;
     }
 
+
     public static class Builder {
-        private String title, slugline, poster, fanArt, overview, tagline;
+        private String title, slugline, poster, fanArt, overview, tagline, imdb;
         private int year;
 
         public Builder title(String title) {
@@ -94,6 +100,10 @@ public class Movie {
             return this;
         }
 
+        public Builder imdb(String imdb) {
+            this.imdb = imdb;
+            return this;
+        }
         public Movie build() {
             return new Movie(this);
         }

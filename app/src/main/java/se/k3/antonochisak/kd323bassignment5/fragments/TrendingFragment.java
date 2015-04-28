@@ -2,7 +2,6 @@ package se.k3.antonochisak.kd323bassignment5.fragments;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -10,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -21,8 +18,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
-
-import org.parceler.transfuse.util.matcher.ImplementsMatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +29,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import se.k3.antonochisak.kd323bassignment5.R;
-import se.k3.antonochisak.kd323bassignment5.adapters.PopularMoviesAdapter;
 import se.k3.antonochisak.kd323bassignment5.adapters.TrendingMoviesAdapter;
 import se.k3.antonochisak.kd323bassignment5.api.RestClient;
-import se.k3.antonochisak.kd323bassignment5.api.model.ApiResponse;
 import se.k3.antonochisak.kd323bassignment5.api.model.RootApiResponse;
 import se.k3.antonochisak.kd323bassignment5.models.movie.Movie;
 
@@ -45,29 +38,34 @@ import static se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers.FIREBAS
 import static se.k3.antonochisak.kd323bassignment5.helpers.StaticHelpers.FIREBASE_URL;
 
 public class TrendingFragment extends MoviesFragment
-    implements Callback<List<RootApiResponse>>, ListView.OnItemClickListener {
+        implements Callback<List<RootApiResponse>>, ListView.OnItemClickListener {
 
 
-    // List of movies
+    // Creating an arraylist of movies here // MA
     ArrayList<Movie> mMovies;
 
-    // This is pushed to mFireBase
+    // FireBase stuff
     HashMap<String, Object> mMovieMap;
 
     RestClient mRestClient;
     Firebase mFireBase;
     Firebase mRef;
 
-    String mCurrentClickedMovie = "";
+    // Let's declare a string to hold the currently active movie item
+    String mActiveMovie = "";
 
+    // Countdown timer and a boolean to validate if timer is running or not.
     CountDownTimer mVoteTimer;
     boolean mIsVoteTimerRunning = false;
 
+    // Out adapter for trending movieslist.
     TrendingMoviesAdapter mAdapter;
 
+    // Injecting a list view using Butterknife library.
     @InjectView(R.id.listView)
-    ListView mMoviesGrid;
+    ListView mMoviesList;
 
+    // Declaring a ProgressBar and injecting a progressbar in the layout
     @InjectView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
@@ -81,19 +79,21 @@ public class TrendingFragment extends MoviesFragment
         mFireBase = new Firebase(FIREBASE_URL);
         mRef = mFireBase.child(FIREBASE_CHILD);
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
-        // Inject views
+
+        // Inject view
         ButterKnife.inject(this, view);
 
-        // Create adapter
+        // Creating the tending movies adapter.
         mAdapter = new TrendingMoviesAdapter(mMovies, getActivity().getLayoutInflater());
-        mMoviesGrid.setAdapter(mAdapter);
+        mMoviesList.setAdapter(mAdapter);
 
-        // listener= GridView.OnItemClickListener
-        mMoviesGrid.setOnItemClickListener(this);
+        // OnClick Listener for the items in the movies list listview.
+        mMoviesList.setOnItemClickListener(this);
         return view;
     }
 
@@ -101,15 +101,19 @@ public class TrendingFragment extends MoviesFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // listener = Callback<List<ApiResponse>>
-        // go to http://docs.trakt.apiary.io/#introduction/extended-info, what should you include?
+        // requesting "full,images" from trakt.tv in order to get more movie details.
+        // Default request returns minimal information.
         mRestClient.getApiService().getTrending("full,images", this);
+
+        // show progressbar while fetching results.
         mProgressBar.setVisibility(View.VISIBLE);
         initVoteTimer();
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+        // Check click/vote timer before accepting a new vote.
         if (!mIsVoteTimerRunning) {
             voteOnMovie(i);
             mVoteTimer.start();
@@ -118,8 +122,8 @@ public class TrendingFragment extends MoviesFragment
     }
 
     void initVoteTimer() {
-        // So that there can only be one vote per every 3 seconds
-        mVoteTimer = new CountDownTimer(0005, 1000) {
+        // Setting vote timer to min 3 sec between votes.
+        mVoteTimer = new CountDownTimer(3000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -135,8 +139,8 @@ public class TrendingFragment extends MoviesFragment
     void voteOnMovie(final int i) {
         Movie movie = mMovies.get(i);
 
-        // Very important
-        mCurrentClickedMovie = movie.getSlugline();
+        // don't touch.
+        mActiveMovie = movie.getSlugline();
 
         mMovieMap.put("title", movie.getTitle());
         mMovieMap.put("year", movie.getYear());
@@ -146,17 +150,17 @@ public class TrendingFragment extends MoviesFragment
         mMovieMap.put("fanart", movie.getFanArt());
 
 
-        mRef.child(mCurrentClickedMovie).updateChildren(mMovieMap, new Firebase.CompletionListener() {
+        mRef.child(mActiveMovie).updateChildren(mMovieMap, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                Toast.makeText(getActivity(), "Gillade " + mMovies.get(i).getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.liked) + " " + mMovies.get(i).getTitle(), Toast.LENGTH_SHORT).show();
                 updateVotes();
             }
         });
     }
 
     void updateVotes() {
-        mRef.child(mCurrentClickedMovie + "/votes").runTransaction(new Transaction.Handler() {
+        mRef.child(mActiveMovie + "/votes").runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
                 if (mutableData.getValue() == null) {
@@ -166,6 +170,7 @@ public class TrendingFragment extends MoviesFragment
                 }
                 return Transaction.success(mutableData);
             }
+
             @Override
             public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
 
@@ -177,19 +182,20 @@ public class TrendingFragment extends MoviesFragment
     public void success(List<RootApiResponse> apiResponses, Response response) {
         Log.i("Success", "we're in success");
         mProgressBar.setVisibility(View.GONE);
-            for (RootApiResponse r : apiResponses) {
+        for (RootApiResponse r : apiResponses) {
 
             // Build a new movie-object for every response and add to list
             Movie movie = new Movie.Builder()
                     .title(r.apiResponse.title)
                     .slugLine(r.apiResponse.ids.getSlug())
-                            .poster(r.apiResponse.image.getPoster().getMediumPoster())
-                           .fanArt(r.apiResponse.image.getFanArt().getFullFanArt())
-                           .year(r.apiResponse.year)
+                    .poster(r.apiResponse.image.getPoster().getMediumPoster())
+                    .fanArt(r.apiResponse.image.getFanArt().getFullFanArt())
+                    .year(r.apiResponse.year)
+                    .imdb(r.apiResponse.imdb)
                     .overview(r.apiResponse.overview)
                     .tagline(r.apiResponse.tagline)
                     .build();
-                Log.i("Success", "Added item!" + r.apiResponse.title + " " + r.apiResponse.tagline);
+            Log.i("Success", "Created and added " + r.apiResponse.imdb + " " + r.apiResponse.title + " " + r.apiResponse.tagline);
             mMovies.add(movie);
             mAdapter.notifyDataSetChanged();
         }
@@ -197,7 +203,7 @@ public class TrendingFragment extends MoviesFragment
 
     @Override
     public void failure(RetrofitError error) {
-        if(error.getKind() == RetrofitError.Kind.NETWORK) {
+        if (error.getKind() == RetrofitError.Kind.NETWORK) {
             Toast.makeText(getActivity(),
                     getResources().getString(R.string.retrofit_network_error),
                     Toast.LENGTH_SHORT)
